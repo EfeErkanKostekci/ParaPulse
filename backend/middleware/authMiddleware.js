@@ -1,10 +1,27 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// TODO: Token doğrulama ve kullanıcı yetkilendirme (Protect route) Hafta 2'de eklenecek
 const protect = async (req, res, next) => {
-  // Authorization mantığı gelecek
-  next();
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-password');
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ message: 'Yetkilendirme başarısız, geçersiz token' });
+    }
+  }
+
+  if (!token) {
+    res.status(401).json({ message: 'Yetkilendirme başarısız, token bulunamadı' });
+  }
 };
 
 module.exports = { protect };

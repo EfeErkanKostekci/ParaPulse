@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 // İleride eklenecek route'lar
-app.use('/api/users', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
 
 const PORT = process.env.PORT || 5000;
