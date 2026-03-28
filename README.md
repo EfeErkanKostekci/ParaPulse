@@ -1,8 +1,8 @@
 # ParaPulse - Yapay Zeka Destekli Kişisel Finans Koçu
 ParaPulse, kullanıcıların gelir ve giderlerini takip etmelerini sağlayan, modern teknolojilerle donatılmış bir finansal yönetim uygulamasıdır. 🛠️ Kullanılan TeknolojilerProje, "probleme uygun teknoloji seçimi" prensibiyle geliştirilmiştir: 
-#Frontend: Flutter (Cross-platform mobil geliştirme) 
-#Backend: Node.js & Express.js Veritabanı: MongoDB (NoSQL & Bulut tabanlı) 
-#Güvenlik: JWT (JSON Web Token) & Bcryptjs 
+### Frontend: Flutter (Cross-platform mobil geliştirme) 
+### Backend: Node.js & Express.js Veritabanı: MongoDB (NoSQL & Bulut tabanlı) 
+### Güvenlik: JWT (JSON Web Token) & Bcryptjs 
 
 ## Proje Durumu (10 Haftalık Plan)
 ✅1. Hafta: Altyapı kurulumu ve veritabanı bağlantısı.
