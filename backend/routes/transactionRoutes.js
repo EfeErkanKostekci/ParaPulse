@@ -1,9 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { getTransactions } = require('../controllers/transactionController');
-// const { protect } = require('../middleware/authMiddleware');
+const {
+  getTransactions,
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+} = require('../controllers/transactionController');
 
-// Transaction Rotaları (İleride protect middleware'i eklenecek)
-// router.get('/', protect, getTransactions);
+const { protect } = require('../middleware/authMiddleware');
+
+router.route('/')
+  .get(protect, getTransactions)
+  .post(protect, addTransaction);
+
+router.route('/:id')
+  .put(protect, updateTransaction)
+  .delete(protect, deleteTransaction);
 
 module.exports = router;
