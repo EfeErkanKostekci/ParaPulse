@@ -5,7 +5,7 @@ const Transaction = require('../models/Transaction');
 // @access  Private
 const getTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id }).sort({ date: -1 });
+    const transactions = await Transaction.find({ user: req.user._id }).sort({ date: -1 });
     res.status(200).json(transactions);
   } catch (error) {
     res.status(500).json({ message: 'Sunucu hatası', error: error.message });
@@ -24,7 +24,7 @@ const addTransaction = async (req, res) => {
     }
 
     const transaction = await Transaction.create({
-      user: req.user.id,
+      user: req.user._id,
       amount,
       category,
       type,
@@ -49,7 +49,7 @@ const updateTransaction = async (req, res) => {
     }
 
     // Harcamanın sahibi isteği atan kullanıcı mı?
-    if (transaction.user.toString() !== req.user.id) {
+    if (transaction.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Yetkilendirme reddedildi' });
     }
 
@@ -77,7 +77,7 @@ const deleteTransaction = async (req, res) => {
     }
 
     // Harcamanın sahibi isteği atan kullanıcı mı?
-    if (transaction.user.toString() !== req.user.id) {
+    if (transaction.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: 'Yetkilendirme reddedildi' });
     }
 
