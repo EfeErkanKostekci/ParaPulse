@@ -1,24 +1,64 @@
-# ParaPulse - Yapay Zeka Destekli Kişisel Finans Koçu
-ParaPulse, kullanıcıların gelir ve giderlerini takip etmelerini sağlayan, modern teknolojilerle donatılmış bir finansal yönetim uygulamasıdır. 🛠️ Kullanılan TeknolojilerProje, "probleme uygun teknoloji seçimi" prensibiyle geliştirilmiştir: 
-### Frontend: Flutter (Cross-platform mobil geliştirme) 
-### Backend: Node.js & Express.js Veritabanı: MongoDB (NoSQL & Bulut tabanlı) 
-### Güvenlik: JWT (JSON Web Token) & Bcryptjs 
+# 💸 ParaPulse - Akıllı Kişisel Finans ve Bütçe Takip Uygulaması
 
-## Proje Durumu (10 Haftalık Plan)
-✅1. Hafta: Altyapı kurulumu ve veritabanı bağlantısı.
-✅2. Hafta: Kullanıcı kayıt/giriş sistemi (Auth) ve JWT entegrasyonu.
-✅3. Hafta: Harcama (Transaction) yönetimi ve CRUD işlemleri.
-⏳ (Sıradaki) Kurulum ve Çalıştırma
+ParaPulse, kullanıcıların gelir ve giderlerini detaylı olarak takip edebildikleri, dinamik temalara ve canlı döviz kurlarına sahip, full-stack (Flutter + Node.js) bir finansal yönetim platformudur.
 
-## Backend Kurulumu
-backend klasörüne gidin: cd backend
-Gerekli paketleri yükleyin: npm install
-.env dosyasını oluşturun ve değişkenleri tanımlayın:
-  Kod snippet'iPORT=5000
-  MONGO_URI=mongodb://127.0.0.1:27017/parapulse
-  JWT_SECRET=senin_gizli_anahtarin
-Sunucuyu başlatın: Bashnode server.js
+## 🚀 Öne Çıkan Özellikler
 
-## Güvenlik Özellikleri
-Kullanıcı şifreleri veritabanında asla açık metin olarak saklanmaz; 
-Bcrypt ile hash'lenir. API uç noktaları JWT ile korunmaktadır, sadece yetkili kullanıcılar işlem yapabilir. 
+- **Gelişmiş Filtreleme ve Analiz:** Günlük, haftalık, aylık ve yıllık bazda harcama dökümleri. İnteraktif Bar ve Pasta grafikler (PieChart & BarChart).
+- **Çoklu Para Birimi (Live Currency):** Harcamalar veritabanında ana para biriminde (TL) tutulurken, API üzerinden çekilen canlı kurlarla anlık olarak USD, EUR vb. birimlere dönüştürülüp görüntülenebilir.
+- **Dinamik Tema Motoru:** Kullanıcı tercihine göre anında değişebilen Açık ve Koyu mod desteği. (Tüm grafik ve metin renkleri temaya duyarlıdır).
+- **Güvenli Kimlik Doğrulama (Auth):** - JWT tabanlı giriş ve kayıt sistemi.
+  - **Nodemailer** entegrasyonu ile 6 haneli OTP (Tek Kullanımlık Şifre) destekli şifre sıfırlama akışı (Şifremi Unuttum).
+- **Kusursuz UI/UX:** '100.000,00 TL' formatında yerelleştirilmiş para gösterimi ve kronolojik (en yeni işlem en üstte) akıllı listeleme mantığı.
+
+## 🛠️ Kullanılan Teknolojiler
+
+### Mobil Geliştirme (Frontend)
+- **Framework:** Flutter (Dart)
+- **State Management:** Provider (Tema ve Para Birimi yönetimi için)
+- **Görselleştirme:** fl_chart (Grafikler)
+- **Diğer Paketler:** google_fonts, shared_preferences, http, intl
+
+### Sunucu & Veritabanı (Backend)
+- **Ortam:** Node.js, Express.js
+- **Veritabanı:** MongoDB (Mongoose ORM)
+- **Güvenlik & Auth:** bcrypt (Şifre hashleme), jsonwebtoken (JWT)
+- **Mail Servisi:** Nodemailer (SMTP tabanlı OTP gönderimi)
+
+---
+
+## ⚙️ Kurulum ve Çalıştırma
+
+Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyin:
+
+### 1. Backend (Node.js) Kurulumu
+```bash
+# Backend klasörüne gidin
+cd backend
+
+# Gerekli paketleri yükleyin
+npm install
+
+# .env dosyasını oluşturun ve aşağıdaki değişkenleri ekleyin:
+# PORT=5000
+# MONGO_URI=sizin_mongodb_baglanti_adresiniz
+# JWT_SECRET=sizin_gizli_anahtariniz
+# EMAIL_USER=sizin_gmail_adresiniz
+# EMAIL_PASS=sizin_gmail_uygulama_sifreniz
+
+# Sunucuyu başlatın
+npm run dev
+```
+
+### 2. Mobil Uygulama Kurulumu
+```bash
+# Mobil klasörüne gidin
+cd parapulse_mobile
+
+# Flutter paketlerini indirin
+flutter pub get
+
+# Uygulamayı çalıştırın (Android Emülatör veya Fiziksel Cihaz)
+flutter run
+```
+Not: Android emülatör kullanıyorsanız, auth_service.dart veya API servislerinizdeki base URL değerinin localhost yerine http://10.0.2.2:5000 olarak ayarlandığından emin olun.
