@@ -18,6 +18,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Lütfen şifrenizi girin'],
     minlength: 6
+  },
+  // Şifre sıfırlama alanları
+  resetCode: {
+    type: String,
+    default: null
+  },
+  resetCodeExpiry: {
+    type: Date,
+    default: null
   }
 }, { timestamps: true });
 

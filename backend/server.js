@@ -24,6 +24,17 @@ app.get('/', (req, res) => {
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
 
+// 404 - Bilinmeyen rota (HTML yerine JSON döndür)
+app.use((req, res) => {
+  res.status(404).json({ message: `Rota bulunamadı: ${req.method} ${req.originalUrl}` });
+});
+
+// Global hata yöneticisi (HTML yerine JSON döndür)
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+  console.error(err.stack);
+  res.status(err.status || 500).json({ message: err.message || 'Sunucu hatası' });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

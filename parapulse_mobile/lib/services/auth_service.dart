@@ -27,6 +27,8 @@ class AuthService {
         // Token'ı SharedPreferences ile telefonun hafızasına kaydet
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('jwt_token', user.token);
+        await prefs.setString('user_name', user.name);
+        await prefs.setString('user_email', user.email);
 
         return user;
       } else {
@@ -53,6 +55,8 @@ class AuthService {
         // Token'ı kaydet
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('jwt_token', user.token);
+        await prefs.setString('user_name', user.name);
+        await prefs.setString('user_email', user.email);
 
         return user;
       } else {
@@ -67,5 +71,59 @@ class AuthService {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt_token');
+    await prefs.remove('user_name');
+    await prefs.remove('user_email');
+  }
+
+  /// Gelen HTTP yanıtını güvenle JSON olarak parse eder.
+  /// Backend HTML hata sayfası döndürürse anlamlı hata fırlatır.
+  Map<String, dynamic> _safeJsonDecode(http.Response response) {
+    final contentType = response.headers['content-type'] ?? '';
+    if (!contentType.contains('application/json')) {
+      // HTML veya beklenmedik bir yanıt geldi
+      throw Exception(
+        'Sunucudan geçersiz yanıt alındı (HTTP ${response.statusCode}). '
+        'Backend başlatıldığından ve /api/users rotalarının doğru çalıştığından emin olun.',
+      );
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  /// 1. Adım: Kullanıcıya 6 haneli OTP kodu gönderir.
+  Future<void> sendResetCode(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/forgot-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+      final body = _safeJsonDecode(response);
+      if (response.statusCode != 200) {
+        throw Exception(body['message'] ?? 'Kod gönderilemedi');
+      }
+    } on Exception {
+      rethrow;
+    } catch (e) {
+      throw Exception('Bağlantı hatası: Sunucuya ulaşılamıyor. Backend’in çalıştığını kontrol edin.');
+    }
+  }
+
+  /// 2. Adım: OTP kodunu ve yeni şifreyi backend’e gönderir.
+  Future<void> resetPassword(String email, String code, String newPassword) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/reset-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'code': code, 'newPassword': newPassword}),
+      );
+      final body = _safeJsonDecode(response);
+      if (response.statusCode != 200) {
+        throw Exception(body['message'] ?? 'Şifre sıfırlama başarısız');
+      }
+    } on Exception {
+      rethrow;
+    } catch (e) {
+      throw Exception('Bağlantı hatası: Sunucuya ulaşılamıyor. Backend’in çalıştığını kontrol edin.');
+    }
   }
 }
